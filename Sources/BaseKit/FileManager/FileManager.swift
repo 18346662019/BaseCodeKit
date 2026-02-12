@@ -6,12 +6,12 @@
 //
 
 import Foundation
-class FileManagerFactory {
-    static func fileExists(pathUrl: URL) -> Bool {
+public class FileManagerFactory {
+    public static func fileExists(pathUrl: URL) -> Bool {
         return FileManager.default.fileExists(atPath: pathUrl.path)
     }
     
-    static func fileRemove(pathUrl: URL) -> Bool {
+    public static func fileRemove(pathUrl: URL) -> Bool {
         do {
             try FileManager.default.removeItem(atPath: pathUrl.path(percentEncoded: true))
             return true
@@ -21,7 +21,7 @@ class FileManagerFactory {
         }
     }
     
-    static func fileMove(from sourceURL: URL, to destinationURL: URL) -> Bool? {
+    public static func fileMove(from sourceURL: URL, to destinationURL: URL) -> Bool? {
         do {
             if fileExists(pathUrl: destinationURL) {
                 try FileManager.default.removeItem(at: destinationURL)
@@ -34,7 +34,7 @@ class FileManagerFactory {
         }
     }
     
-    static func fileCreate(_ pathUrl: URL) -> Bool? {
+    public static func fileCreate(_ pathUrl: URL) -> Bool? {
         do {
             try FileManager.default.createDirectory(at: pathUrl, withIntermediateDirectories: true)
             return true
@@ -44,7 +44,7 @@ class FileManagerFactory {
         }
     }
     
-    static func fileCopyItem(from sourceURL: URL, to destinationURL: URL) -> Bool {
+    public static func fileCopyItem(from sourceURL: URL, to destinationURL: URL) -> Bool {
         do {
             if fileExists(pathUrl: sourceURL) {
                 try FileManager.default.removeItem(at: destinationURL)
@@ -57,7 +57,7 @@ class FileManagerFactory {
         }
     }
     
-    static func contentsOfDirector(at pathUrl: URL) -> [URL]? {
+    public static func contentsOfDirector(at pathUrl: URL) -> [URL]? {
         do {
             let urls = try FileManager.default.contentsOfDirectory(at: pathUrl, includingPropertiesForKeys: nil)
             return urls
@@ -70,13 +70,13 @@ class FileManagerFactory {
     // 这个方法有两个作用：
     // 1. 返回 Bool：路径是否存在
     // 2. 通过 inout 参数返回：是否是目录  是否是文件夹
-    static func isDirectory(at pathUrl: URL) -> Bool {
+    public static func isDirectory(at pathUrl: URL) -> Bool {
         var isDirectory: ObjCBool = false
         _ = FileManager.default.fileExists(atPath: pathUrl.path, isDirectory: &isDirectory)
         return isDirectory.boolValue
     }
     //file: tmp/tepzip
-    static func recursiveContentsOfDirectory(at pathUrl: URL) -> [URL]? {
+    public static func recursiveContentsOfDirectory(at pathUrl: URL) -> [URL]? {
         //判断是否是目录
         guard isDirectory(at: pathUrl) else { return nil }
         // 便利这个文件夹 或者是目录
@@ -88,7 +88,7 @@ class FileManagerFactory {
         return urls
     }
     
-    static func fileSize(at pathUrl: URL) -> Int64? {
+    public static func fileSize(at pathUrl: URL) -> Int64? {
         do {
             let attribute = try FileManager.default.attributesOfItem(atPath: pathUrl.path)
             return attribute[.size] as? Int64
@@ -98,7 +98,7 @@ class FileManagerFactory {
         }
     }
     
-    static func creationDate(of pathUrl: URL) -> Date? {
+    public static func creationDate(of pathUrl: URL) -> Date? {
         do {
             let attribute = try FileManager.default.attributesOfItem(atPath: pathUrl.path)
             return attribute[.creationDate] as? Date
@@ -108,17 +108,17 @@ class FileManagerFactory {
         }
     }
     
-    static var documentsDirectory: URL? {
+    public static var documentsDirectory: URL? {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     }
-    static var cacheDirectory: URL? {
+    public static var cacheDirectory: URL? {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
     }
-    static var tempDirectory: URL {
+    public static var tempDirectory: URL {
         return FileManager.default.temporaryDirectory
     }
     //获取磁盘可用空间
-    static var availabelDiskSpace: Int64? {
+    public static var availabelDiskSpace: Int64? {
         do {
             let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory())
             return systemAttributes[.systemFreeSize] as? Int64
@@ -127,7 +127,7 @@ class FileManagerFactory {
             return nil
         }
     }
-    static var totalDiskSpace: Int64? {
+    public static var totalDiskSpace: Int64? {
         do {
             let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory())
             return systemAttributes[.systemSize] as? Int64

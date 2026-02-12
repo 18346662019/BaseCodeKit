@@ -13,7 +13,7 @@ import Swinject
 //}.inObjectScope(.transient)
 
 extension AppContainer{
-    func resolve<T>(_ type: T.Type) -> T {
+    public func resolve<T>(_ type: T.Type) -> T {
         guard let service = container.resolve(type) else {
             fatalError("Dependency of type \(type) has not been registered.")
         }
@@ -21,11 +21,11 @@ extension AppContainer{
     }
 }
 
-class AppContainer: @unchecked Sendable {
-    static let shared = AppContainer()
-    var container: Container
+public class AppContainer: @unchecked Sendable {
+    public static let shared = AppContainer()
+    public var container: Container
     
-    static func resolve<T>(_ type: T.Type) -> T {
+    public static func resolve<T>(_ type: T.Type) -> T {
         return AppContainer.shared.resolve(type)
     }
     
