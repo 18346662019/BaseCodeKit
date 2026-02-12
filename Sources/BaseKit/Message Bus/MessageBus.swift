@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 public final class MessageBus: @unchecked Sendable {
-    static let shared = MessageBus()
+    public static let shared = MessageBus()
     private init() {}
     
     /// 存储所有订阅者

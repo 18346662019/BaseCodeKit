@@ -13,7 +13,7 @@ public class FileManagerFactory {
     
     public static func fileRemove(pathUrl: URL) -> Bool {
         do {
-            try FileManager.default.removeItem(atPath: pathUrl.path(percentEncoded: true))
+            try FileManager.default.removeItem(atPath: pathUrl.path)
             return true
         } catch {
             print("fileRemove \(error)")

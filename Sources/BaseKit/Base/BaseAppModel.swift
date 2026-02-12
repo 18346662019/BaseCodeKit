@@ -7,13 +7,18 @@
 
 import Foundation
 import Combine
+import Swinject
 
 public class BaseAppModel: ObservableObject {
-    let messageBus = MessageBus.shared
-    let fileManager = FileManagerFactory()
-    let appContainer = AppContainer.shared.container
-    let netWork = NetworkManager.shared
-    let logger = Logger(category: "App")
+    public let messageBus = MessageBus.shared
+    public let fileManager = FileManagerFactory()
+    public let appContainer = AppContainer.shared.container
+    public let netWork = NetworkManager.shared
+    public let logger = Logger(category: "App")
+    
+    init() {
+        
+    }
 }
 
 
