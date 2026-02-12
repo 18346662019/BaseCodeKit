@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SubscriberIdentifer: Hashable {
+public struct SubscriberIdentifer: Hashable {
     let id: UUID
     let type: String
     

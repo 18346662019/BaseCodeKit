@@ -6,27 +6,27 @@
 //
 
 import Foundation
-protocol IMessageHistoryService {
+public protocol IMessageHistoryService {
     func saveMessage(message: Message)
     func getMessageHistory() -> [Message]
     func getMessageHistory(forMessageId messageId: String) -> [Message]
 }
-class MemoryMessageHistoryService: IMessageHistoryService {
-    private var messageHistory: [Message] = []
-    private var maxHistoryCount: Int = 100
+public class MemoryMessageHistoryService: IMessageHistoryService {
+    public var messageHistory: [Message] = []
+    public var maxHistoryCount: Int = 100
     
-    func saveMessage(message: Message) {
+    public func saveMessage(message: Message) {
         messageHistory.append(message)
         if messageHistory.count > maxHistoryCount {
             messageHistory.removeFirst(messageHistory.count - maxHistoryCount)
         }
     }
     
-    func getMessageHistory() -> [Message] {
+    public func getMessageHistory() -> [Message] {
         return messageHistory
     }
     
-    func getMessageHistory(forMessageId messageId: String) -> [Message] {
+    public func getMessageHistory(forMessageId messageId: String) -> [Message] {
        return  messageHistory.filter({$0.id == messageId })
     }
 }

@@ -20,8 +20,8 @@ enum NetworkError: Error {
     case unsupportedMediaType
 }
 
-final class NetworkManager: @unchecked Sendable {
-    static let shared = NetworkManager()
+public final class NetworkManager: @unchecked Sendable {
+    public static let shared = NetworkManager()
     
     private let session: Session
     
@@ -37,7 +37,7 @@ final class NetworkManager: @unchecked Sendable {
     }
     
     // MARK: - GET 请求
-    func get<T: Decodable & Sendable>(
+    public  func get<T: Decodable & Sendable>(
         _ url: String,
         parameters: Parameters? = nil,
         headers: HTTPHeaders? = nil
@@ -52,7 +52,7 @@ final class NetworkManager: @unchecked Sendable {
     }
     
     // MARK: - POST 请求
-    func post<T: Decodable & Sendable>(
+    public  func post<T: Decodable & Sendable>(
         _ url: String,
         parameters: Parameters? = nil,
         headers: HTTPHeaders? = nil
@@ -67,7 +67,7 @@ final class NetworkManager: @unchecked Sendable {
     }
     
     // MARK: - 文件上传
-    func uploadFile(
+    public func uploadFile(
         _ url: String,
         fileURL: URL,
         fieldName: String = "file",
@@ -123,7 +123,7 @@ final class NetworkManager: @unchecked Sendable {
  
     
     // MARK: - 文件下载
-    func downloadFile(
+    public  func downloadFile(
         _ url: String,
         destination: URL? = nil,
         fileName: String? = nil,
@@ -181,7 +181,7 @@ final class NetworkManager: @unchecked Sendable {
     /// - Returns: 上传响应数据
     /// - Throws: 网络错误
     // MARK: - POST文件上传（通用风格版）
-    func postUploadFile<T: Decodable & Sendable>(
+    public  func postUploadFile<T: Decodable & Sendable>(
         url: String,
         fileURL: URL,
         fieldName: String = "file",
@@ -252,7 +252,7 @@ final class NetworkManager: @unchecked Sendable {
     }
     
     // MARK: - 通用请求方法
-    private func request<T: Decodable & Sendable >(
+    public  func request<T: Decodable & Sendable >(
         url: String,
         method: HTTPMethod,
         parameters: Parameters?,
@@ -322,7 +322,7 @@ final class NetworkManager: @unchecked Sendable {
 //                    ))
 //                }
 // MARK: - 辅助类型和扩展
-struct UploadResponse: Decodable {
+public struct UploadResponse: Decodable, Sendable {
     let success: Bool
     let message: String?
     let fileUrl: URL?
@@ -338,8 +338,8 @@ extension URL {
 }
 
 // MARK: - 网络请求日志记录器
-final class NetworkLogger: EventMonitor {
-    func requestDidResume(_ request: Request) {
+public final class NetworkLogger: EventMonitor {
+    public  func requestDidResume(_ request: Request) {
         print("🌐 [Network Request] \(request.description)")
         
         if let headers = request.request?.allHTTPHeaderFields {
@@ -352,7 +352,7 @@ final class NetworkLogger: EventMonitor {
         }
     }
     
-    func request(_ request: DataRequest, didParseResponse response: DataResponse<Data?, AFError>) {
+    public func request(_ request: DataRequest, didParseResponse response: DataResponse<Data?, AFError>) {
         guard let statusCode = response.response?.statusCode else { return }
         let statusIcon = (200..<300).contains(statusCode) ? "✅" : "❌"
         print("\(statusIcon) [\(statusCode)] \(request.description)")

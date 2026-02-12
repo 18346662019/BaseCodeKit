@@ -8,6 +8,10 @@
 import Foundation
 import Swinject
 
+//self.appContainer.register(MessageProtocol.self) { _ in
+//    Message(id: "", sender: nil, timestamp: Date(), payload: nil)
+//}.inObjectScope(.transient)
+
 extension AppContainer{
     func resolve<T>(_ type: T.Type) -> T {
         guard let service = container.resolve(type) else {
@@ -17,7 +21,7 @@ extension AppContainer{
     }
 }
 
-class AppContainer : @unchecked Sendable {
+class AppContainer: @unchecked Sendable {
     static let shared = AppContainer()
     var container: Container
     
@@ -27,10 +31,20 @@ class AppContainer : @unchecked Sendable {
     
     private init() {
         container = Container()
-        registerDependencies()
     }
     
-    func registerDependencies() {
-        
+    // 对外可调用的 register 接口
+    public func register<Service>(_ serviceType: Service.Type,
+                                  name: String? = nil,
+                                  factory: @escaping (any Resolver) -> Service) {
+        container.register(serviceType, name: name) { resolver in
+            return factory(resolver)
+        }
     }
+    
+    // 简单的 resolve 辅助
+    public func resolve<Service>(_ serviceType: Service.Type, name: String? = nil) -> Service? {
+        return container.resolve(serviceType, name: name)
+    }
+    
 }

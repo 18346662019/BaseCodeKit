@@ -6,17 +6,17 @@
 //
 
 import Foundation
-protocol MessageProtocol {
+public protocol MessageProtocol {
     var id: String { get }
     var sender: AnyHashable? { get }
     var timestamp: Date { get }
 }
 
-struct Message: MessageProtocol {
-    let id: String
-    let sender: AnyHashable?
-    let timestamp: Date
-    let payload: Any?
+public struct Message: MessageProtocol {
+    public let id: String
+    public let sender: AnyHashable?
+    public let timestamp: Date
+    public let payload: Any?
     
     init(id: String, sender: AnyHashable?, timestamp: Date, payload: Any?) {
         self.id = id

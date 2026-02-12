@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class MessageBus: @unchecked Sendable {
+public final class MessageBus: @unchecked Sendable {
     static let shared = MessageBus()
     private init() {}
     
@@ -32,7 +32,7 @@ final class MessageBus: @unchecked Sendable {
     ///  - messageType: 消息类型
     ///  - subscriberId: 订阅者标识符
     ///  - handler: 处理消息的闭包
-    func subscribe(_ subscriber: SubscriberIdentifer, to messageId: MessageType,  handler: @escaping (Message) -> Void) {
+    public func subscribe(_ subscriber: SubscriberIdentifer, to messageId: MessageType,  handler: @escaping (Message) -> Void) {
         if subscriptions[messageId.rawValue] == nil {
             subscriptions[messageId.rawValue] = []
         }
@@ -40,7 +40,7 @@ final class MessageBus: @unchecked Sendable {
     }
     
     /// 订阅多个消息
-    func subscribe(_ subscriber: SubscriberIdentifer, to messageIds: [MessageType], handler: @escaping(Message) -> Void) {
+    public func subscribe(_ subscriber: SubscriberIdentifer, to messageIds: [MessageType], handler: @escaping(Message) -> Void) {
         for messageId in messageIds {
             subscribe(subscriber, to: messageId, handler: handler)
         }
@@ -50,7 +50,7 @@ final class MessageBus: @unchecked Sendable {
     /// 取消订阅
 
     /// 取消特定消息
-    func unsubscribe(_ subscriber: SubscriberIdentifer, from messageId: MessageType) {
+    public func unsubscribe(_ subscriber: SubscriberIdentifer, from messageId: MessageType) {
         guard var subscribers = subscriptions[messageId.rawValue] else { return }
         // 2. 记录原始数量用于调试
           let originalCount = subscribers.count
@@ -71,14 +71,14 @@ final class MessageBus: @unchecked Sendable {
     }
     
     /// 取消订阅所有消息
-    func unsubscribeAll(_ subscriber: SubscriberIdentifer) {
+    public func unsubscribeAll(_ subscriber: SubscriberIdentifer) {
         for (messageId, _) in subscriptions {
             unsubscribe(subscriber, from: MessageType(rawValue: messageId)!)
         }
     }
     
     ///移除所有订阅者
-    func removeAllSubscribers() {
+    public func removeAllSubscribers() {
         subscriptions.removeAll()
     }
     
@@ -87,7 +87,7 @@ final class MessageBus: @unchecked Sendable {
     /// - Parameter messageId: 消息Id
     /// - sender: 发送者标识
     /// - payload: 消息负载
-    func send(_ messageId: MessageType,
+    public func send(_ messageId: MessageType,
               sender: AnyHashable? = nil,
               payload: Any? = nil) {
         let message = Message(id: messageId.rawValue, sender: sender, timestamp: Date(), payload: payload)
@@ -104,7 +104,7 @@ final class MessageBus: @unchecked Sendable {
     }
 
     /// 发送消息给特定类型的订阅者
-    func send(_ messageId: MessageType, to subscribeType: String, sender: AnyHashable? = nil,  payload: Any? = nil) {
+    public func send(_ messageId: MessageType, to subscribeType: String, sender: AnyHashable? = nil,  payload: Any? = nil) {
         let message = Message(id: messageId.rawValue, sender: sender, timestamp: Date(), payload: payload)
         // 保存消息到历史记录
         saveToHistory(message)
@@ -118,7 +118,7 @@ final class MessageBus: @unchecked Sendable {
         }
     }
     /// 发消息给除发送者外的所有订阅者
-    func sendToOthers(_ messageId: MessageType, sender: AnyHashable, payload: Any? = nil) {
+    public func sendToOthers(_ messageId: MessageType, sender: AnyHashable, payload: Any? = nil) {
         let message = Message(id: messageId.rawValue, sender: sender, timestamp: Date(), payload: payload)
         
         saveToHistory(message)
@@ -135,7 +135,7 @@ final class MessageBus: @unchecked Sendable {
         }
     }
     /// 获取历史消息
-    func getHistory(for messageId: MessageType? = nil, limit: Int = 100) -> [Message] {
+    public func getHistory(for messageId: MessageType? = nil, limit: Int = 100) -> [Message] {
         var filteredHistory: [Message]
         
         if let messageId {
@@ -146,21 +146,21 @@ final class MessageBus: @unchecked Sendable {
         return Array(filteredHistory.suffix(limit))
     }
     /// 清空历史记录
-    func clearHistory() {
+    public func clearHistory() {
         messageHistory.removeAll()
     }
     /// 查询和统计
     /// 获取所有消息类型
-    func getAllMessageTypes() -> [String] {
+    public func getAllMessageTypes() -> [String] {
         return Array(subscriptions.keys)
     }
     /// 获取特定消息的订阅者数量
-    func getSubscriberCount(for messageId: MessageType) -> Int {
+    public func getSubscriberCount(for messageId: MessageType) -> Int {
         return subscriptions[messageId.rawValue]?.count ?? 0
     }
     
     /// 获取所有订阅者
-    func getAllSubscribers() -> [String: [SubscriberIdentifer]] {
+    public func getAllSubscribers() -> [String: [SubscriberIdentifer]] {
         var result: [String: [SubscriberIdentifer]] = [:]
         for (messageId, subscribers) in subscriptions {
             result[messageId] = subscribers.map { $0.0 }
@@ -168,7 +168,7 @@ final class MessageBus: @unchecked Sendable {
         return result
     }
     /// 打印当前状态
-    func printStatus() {
+    public func printStatus() {
         logger.log("消息总线状态：")
         logger.log("消息总线类型： \(subscriptions.count)")
         
@@ -183,7 +183,7 @@ final class MessageBus: @unchecked Sendable {
         logger.log(" 历史消息数量：\(messageHistory.count)")
     }
     
-    private func saveToHistory(_ message: Message) {
+    public func saveToHistory(_ message: Message) {
         messageHistory.append(message)
         if messageHistory.count > maxHistoryCount {
             messageHistory.removeFirst(messageHistory.count - maxHistoryCount)
@@ -194,7 +194,7 @@ final class MessageBus: @unchecked Sendable {
 
 extension MessageBus {
     /// 为ViewModel 创建的便捷订阅方法
-    static func subscribe<T: AnyObject>(_ subscriber: T, to messageId: MessageType, handler: @escaping(T, Message) -> Void) {
+    public static func subscribe<T: AnyObject>(_ subscriber: T, to messageId: MessageType, handler: @escaping(T, Message) -> Void) {
         let uuid = UUID()
         let identifier = SubscriberIdentifer(id: uuid, type: String(describing: T.self))
         
@@ -205,7 +205,7 @@ extension MessageBus {
     }
     
     /// 便捷发送消息
-    static func send(_ messageId: MessageType, sender: AnyObject? = nil, payload: Any? = nil) {
+    public static func send(_ messageId: MessageType, sender: AnyObject? = nil, payload: Any? = nil) {
         let senderHasshable: AnyHashable? = sender.map { ObjectIdentifier($0) }
         shared.send(messageId, sender: senderHasshable, payload: payload)
     }

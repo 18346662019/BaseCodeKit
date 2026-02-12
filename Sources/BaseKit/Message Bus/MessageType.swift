@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum MessageType: String {
+public enum MessageType: String {
     case entityDidSelect = "entity.did.select"
     case entityDidUpdate = "entity.did.update"
 }
