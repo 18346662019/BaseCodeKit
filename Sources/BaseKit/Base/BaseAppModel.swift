@@ -16,6 +16,8 @@ public class BaseAppModel: ObservableObject {
     public let netWork = NetworkManager()
     public let logger = Logger(category: "App")
     
+    public init() {}
+    
 }
 
 
