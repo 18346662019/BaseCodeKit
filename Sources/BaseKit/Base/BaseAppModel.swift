@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import Swinject
 
-public class BaseAppModel: ObservableObject {
+public class BaseAppModel {
     public let messageBus = MessageBus()
     public let fileManager = FileManagerFactory()
     public let appContainer = AppContainer()

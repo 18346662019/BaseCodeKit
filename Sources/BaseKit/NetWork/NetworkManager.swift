@@ -37,7 +37,8 @@ public final class NetworkManager: @unchecked Sendable {
     }
     
     // MARK: - GET 请求
-    public  func get<T: Decodable & Sendable>(
+    @preconcurrency
+    public func get<T: Decodable & Sendable>(
         _ url: String,
         parameters: Parameters? = nil,
         headers: HTTPHeaders? = nil
