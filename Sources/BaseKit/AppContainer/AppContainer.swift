@@ -8,10 +8,6 @@
 import Foundation
 import Swinject
 
-//self.appContainer.register(MessageProtocol.self) { _ in
-//    Message(id: "", sender: nil, timestamp: Date(), payload: nil)
-//}.inObjectScope(.transient)
-
 extension AppContainer{
     public func resolve<T>(_ type: T.Type) -> T {
         guard let service = container.resolve(type) else {
@@ -21,7 +17,7 @@ extension AppContainer{
     }
 }
 
-public class AppContainer: @unchecked Sendable {
+public final class AppContainer: @unchecked Sendable {
     public static let shared = AppContainer()
     public var container: Container
     
@@ -29,7 +25,7 @@ public class AppContainer: @unchecked Sendable {
         return AppContainer.shared.resolve(type)
     }
     
-    private init() {
+    public init() {
         container = Container()
     }
     

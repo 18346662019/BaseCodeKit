@@ -10,15 +10,12 @@ import Combine
 import Swinject
 
 public class BaseAppModel: ObservableObject {
-    public let messageBus = MessageBus.shared
+    public let messageBus = MessageBus()
     public let fileManager = FileManagerFactory()
-    public let appContainer = AppContainer.shared.container
-    public let netWork = NetworkManager.shared
+    public let appContainer = AppContainer()
+    public let netWork = NetworkManager()
     public let logger = Logger(category: "App")
     
-    public init() {
-        
-    }
 }
 
 

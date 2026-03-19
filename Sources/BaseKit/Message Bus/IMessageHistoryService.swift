@@ -6,11 +6,13 @@
 //
 
 import Foundation
+
 public protocol IMessageHistoryService {
     func saveMessage(message: Message)
     func getMessageHistory() -> [Message]
     func getMessageHistory(forMessageId messageId: String) -> [Message]
 }
+
 public class MemoryMessageHistoryService: IMessageHistoryService {
     public var messageHistory: [Message] = []
     public var maxHistoryCount: Int = 100

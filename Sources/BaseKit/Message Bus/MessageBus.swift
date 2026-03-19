@@ -10,7 +10,7 @@ import Combine
 
 public final class MessageBus: @unchecked Sendable {
     public static let shared = MessageBus()
-    private init() {}
+    public init() {}
     
     /// 存储所有订阅者
     private var subscriptions: [String: [(SubscriberIdentifer, (Message) -> Void)]] = [:]
@@ -48,7 +48,6 @@ public final class MessageBus: @unchecked Sendable {
     
     
     /// 取消订阅
-
     /// 取消特定消息
     public func unsubscribe(_ subscriber: SubscriberIdentifer, from messageId: MessageType) {
         guard var subscribers = subscriptions[messageId.rawValue] else { return }
@@ -189,7 +188,6 @@ public final class MessageBus: @unchecked Sendable {
             messageHistory.removeFirst(messageHistory.count - maxHistoryCount)
         }
     }
-    
 }
 
 extension MessageBus {

@@ -39,7 +39,7 @@ public class FileManagerFactory {
             try FileManager.default.createDirectory(at: pathUrl, withIntermediateDirectories: true)
             return true
         } catch {
-            print("\(error)")
+            print("fileCreate \(error)")
             return false
         }
     }

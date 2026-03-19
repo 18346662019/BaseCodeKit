@@ -25,7 +25,7 @@ public final class NetworkManager: @unchecked Sendable {
     
     private let session: Session
     
-    init() {
+    public init() {
         let configuration = URLSessionConfiguration.af.default
         configuration.timeoutIntervalForRequest = 30
         configuration.timeoutIntervalForResource = 120
